@@ -16,6 +16,21 @@ void ASpaceship::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ASpaceship::SetRotation(const FRotator& Rotation)
+{
+	GetRootComponent()->SetRelativeRotation(Rotation);
+}
+
+void ASpaceship::MoveForward()
+{
+	Move(GetActorRotation().Vector());
+}
+
+void ASpaceship::Shoot()
+{
+	GetWorld()->SpawnActor<AActor>(ProjectileClass, GetActorLocation(), GetActorRotation(), FActorSpawnParameters());
+}
+
 // Called to bind functionality to input
 void ASpaceship::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

@@ -30,16 +30,47 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable)
+	URotatingMovementComponent* GetRotatingMovementComponent();
+
+	UFUNCTION(BlueprintCallable)
+	UPawnMovementComponent* GetPawnMovementComponent();
+
+	UFUNCTION(BlueprintCallable)
+	UStaticMeshComponent* GetStaticMeshComponent();
+
+	UFUNCTION(BlueprintCallable)
+	UCapsuleComponent* GetCapsuleComponent();
+
+	/**
+	 * Applique la force voulue au pion
+	 * 
+	 * À appeler à chaque frame
+	 * @param Force Vecteur représentant la force à appliquer
+	 */
+	UFUNCTION(BlueprintCallable)
+	void ApplyForce(const FVector& Force);
+
+	/**
+	 * Applique une force dans la direction voulue
+	 * 
+	 * La force réelle appliquée sera basée sur la vitesse et vitesse max
+	 * du MovementComponent de ce pion
+	 * @param Direction Vecteur représentant une direction
+	 */
+	UFUNCTION(BlueprintCallable)
+	void Move(const FVector& Direction);
+
+	/**
+	 * Définit une force de rotation constante
+	 * @param Rotation FRotator représentant la force de rotation à appliquer
+	 */
+	UFUNCTION(BlueprintCallable)
+	void ApplyRotationForce(const FRotator& Rotation);
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	/**
-	 * Move forward by ForwardForce, to be applied each frame
-	 * @param ForwardForce Force to apply
-	 */
-	UFUNCTION(BlueprintCallable)
-	void MoveForward(double ForwardForce);
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;

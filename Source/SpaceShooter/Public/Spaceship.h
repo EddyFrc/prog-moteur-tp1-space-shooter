@@ -16,8 +16,29 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AActor> ProjectileClass;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	/**
+	 * Change la direction du vaisseau
+	 * @param Rotation Angle à appliquer
+	 */
+	UFUNCTION(BlueprintCallable)
+	void SetRotation(const FRotator& Rotation);
+
+	/**
+	 * Fait se déplacer le vaisseau vers l'avant
+	 *
+	 * À appeler à chaque frame
+	 */
+	UFUNCTION(BlueprintCallable)
+	void MoveForward();
+
+	UFUNCTION(BlueprintCallable)
+	void Shoot();
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;

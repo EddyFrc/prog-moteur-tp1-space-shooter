@@ -3,6 +3,25 @@
 
 #include "SpaceShooter/Public/VolumePawn.h"
 
+URotatingMovementComponent* AVolumePawn::GetRotatingMovementComponent()
+{
+	return RotatingMovementComponent;
+}
+
+UPawnMovementComponent* AVolumePawn::GetPawnMovementComponent()
+{
+	return PawnMovementComponent;
+}
+
+UStaticMeshComponent* AVolumePawn::GetStaticMeshComponent()
+{
+	return StaticMeshComponent;
+}
+
+UCapsuleComponent* AVolumePawn::GetCapsuleComponent()
+{
+	return CapsuleComponent;
+}
 
 // Called when the game starts or when spawned
 void AVolumePawn::BeginPlay()
@@ -16,10 +35,24 @@ void AVolumePawn::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AVolumePawn::MoveForward(double ForwardForce)
+void AVolumePawn::ApplyForce(const FVector& Force)
 {
+	GetPawnMovementComponent()->AddInputVector(Force);
 }
 
+void AVolumePawn::Move(const FVector& Direction)
+{
+	FVector ActualForce = FVector(Direction);
+	ActualForce.Normalize();
+	ActualForce *= GetPawnMovementComponent()->Velocity;
+	ActualForce = ActualForce.GetClampedToMaxSize(GetPawnMovementComponent()->GetMaxSpeed());
+	ApplyForce(ActualForce);
+}
+
+void AVolumePawn::ApplyRotationForce(const FRotator& Rotation)
+{
+	GetRotatingMovementComponent()->RotationRate = Rotation;
+}
 
 // Called to bind functionality to input
 void AVolumePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
