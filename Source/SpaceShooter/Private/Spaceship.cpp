@@ -23,7 +23,7 @@ void ASpaceship::TakeDamage()
 	}
 }
 
-void ASpaceship::SetRotation(const FRotator& Rotation)
+void ASpaceship::SetDirection(const FRotator& Rotation)
 {
 	GetRootComponent()->SetRelativeRotation(Rotation);
 }

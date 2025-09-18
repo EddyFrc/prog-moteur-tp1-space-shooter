@@ -39,7 +39,7 @@ public:
 	 * @param Rotation Angle à appliquer
 	 */
 	UFUNCTION(BlueprintCallable)
-	void SetRotation(const FRotator& Rotation);
+	void SetDirection(const FRotator& Rotation);
 
 	/**
 	 * Fait se déplacer le vaisseau vers l'avant
