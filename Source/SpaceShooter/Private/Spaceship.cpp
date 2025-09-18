@@ -14,7 +14,7 @@ int ASpaceship::GetHealth()
 	return Health;
 }
 
-void ASpaceship::TakeDamage()
+void ASpaceship::TakeHit()
 {
 	Health--;
 	if (Health <= 0)

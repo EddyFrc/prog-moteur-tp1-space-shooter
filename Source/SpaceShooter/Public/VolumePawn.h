@@ -56,13 +56,6 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void Move(const FVector& Direction);
 
-	/**
-	 * Définit une force de rotation constante
-	 * @param Rotation FRotator représentant la force de rotation à appliquer
-	 */
-	UFUNCTION(BlueprintCallable)
-	void ApplyRotationForce(const FRotator& Rotation);
-
 	// ----- REDÉFINITIONS et CONSTRUCTEUR -----
 
 	// Called when the game starts or when spawned

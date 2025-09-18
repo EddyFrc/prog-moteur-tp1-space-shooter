@@ -32,7 +32,7 @@ public:
 	int GetHealth();
 
 	UFUNCTION(BlueprintCallable)
-	void TakeDamage();
+	void TakeHit();
 
 	/**
 	 * Change la direction du vaisseau
