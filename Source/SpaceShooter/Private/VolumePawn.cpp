@@ -3,6 +3,8 @@
 
 #include "SpaceShooter/Public/VolumePawn.h"
 
+// ----- GETTERS -----
+
 URotatingMovementComponent* AVolumePawn::GetRotatingMovementComponent()
 {
 	return RotatingMovementComponent;
@@ -23,17 +25,7 @@ UCapsuleComponent* AVolumePawn::GetCapsuleComponent()
 	return CapsuleComponent;
 }
 
-// Called when the game starts or when spawned
-void AVolumePawn::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
-// Called every frame
-void AVolumePawn::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
+// ----- MÉTHODES -----
 
 void AVolumePawn::ApplyForce(const FVector& Force)
 {
@@ -54,6 +46,20 @@ void AVolumePawn::ApplyRotationForce(const FRotator& Rotation)
 	GetRotatingMovementComponent()->RotationRate = Rotation;
 }
 
+// ----- REDÉFINITIONS et CONSTRUCTEUR -----
+
+// Called when the game starts or when spawned
+void AVolumePawn::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+// Called every frame
+void AVolumePawn::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
 // Called to bind functionality to input
 void AVolumePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -67,15 +73,15 @@ AVolumePawn::AVolumePawn()
 	PrimaryActorTick.bCanEverTick = true;
 
 	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
-	RootComponent = CapsuleComponent;
+	RootComponent = GetCapsuleComponent();
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
-	CapsuleComponent->SetupAttachment(CapsuleComponent);
+	GetStaticMeshComponent()->SetupAttachment(GetCapsuleComponent());
 
 	PawnMovementComponent = CreateDefaultSubobject<UPawnMovementComponent, UFloatingPawnMovement>(
 		TEXT("PawnMovementComponent"));
-	PawnMovementComponent->UpdatedComponent = CapsuleComponent;
+	GetPawnMovementComponent()->UpdatedComponent = GetCapsuleComponent();
 
 	RotatingMovementComponent = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("RotatingMovementComponent"));
-	RotatingMovementComponent->UpdatedComponent = CapsuleComponent;
+	GetRotatingMovementComponent()->UpdatedComponent = GetCapsuleComponent();
 }

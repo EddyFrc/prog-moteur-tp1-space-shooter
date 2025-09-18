@@ -11,16 +11,28 @@ class SPACESHOOTER_API ASpaceship : public AVolumePawn
 {
 	GENERATED_BODY()
 
+	// ----- ATTRIBUTS -----
+
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Health;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AActor> ProjectileClass;
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	// ----- MÉTHODES -----
+
+protected:
+	UFUNCTION(BlueprintCallable)
+	virtual void OnSpaceshipDestroyed();
+
+public:
+	UFUNCTION(BlueprintCallable)
+	int GetHealth();
+
+	UFUNCTION(BlueprintCallable)
+	void TakeDamage();
 
 	/**
 	 * Change la direction du vaisseau
@@ -37,11 +49,24 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void MoveForward();
 
+	/**
+	 * Génère un projectile selon la classe définie dans ProjectileClass
+	 */
 	UFUNCTION(BlueprintCallable)
 	void Shoot();
 
+	// ----- REDÉFINITIONS et CONSTRUCTEUR -----
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
 	// Sets default values for this pawn's properties
 	ASpaceship();

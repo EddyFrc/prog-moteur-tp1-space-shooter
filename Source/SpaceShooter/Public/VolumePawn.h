@@ -14,6 +14,8 @@ class SPACESHOOTER_API AVolumePawn : public APawn
 {
 	GENERATED_BODY()
 
+	// ----- ATTRIBUTS -----
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* StaticMeshComponent;
 
@@ -27,8 +29,7 @@ class SPACESHOOTER_API AVolumePawn : public APawn
 	URotatingMovementComponent* RotatingMovementComponent;
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	// ----- GETTERS -----
 
 	UFUNCTION(BlueprintCallable)
 	URotatingMovementComponent* GetRotatingMovementComponent();
@@ -41,6 +42,8 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	UCapsuleComponent* GetCapsuleComponent();
+
+	// ----- MÉTHODES -----
 
 	/**
 	 * Applique la force voulue au pion
@@ -67,6 +70,11 @@ protected:
 	 */
 	UFUNCTION(BlueprintCallable)
 	void ApplyRotationForce(const FRotator& Rotation);
+
+	// ----- REDÉFINITIONS et CONSTRUCTEUR -----
+
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 public:
 	// Called every frame

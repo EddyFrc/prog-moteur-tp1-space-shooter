@@ -1,19 +1,26 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "SpaceShooter/Public/Spaceship.h"
 
+// ----- MÉTHODES -----
 
-// Called when the game starts or when spawned
-void ASpaceship::BeginPlay()
+void ASpaceship::OnSpaceshipDestroyed()
 {
-	Super::BeginPlay();
+	Destroy();
 }
 
-// Called every frame
-void ASpaceship::Tick(float DeltaTime)
+int ASpaceship::GetHealth()
 {
-	Super::Tick(DeltaTime);
+	return Health;
+}
+
+void ASpaceship::TakeDamage()
+{
+	Health--;
+	if (Health <= 0)
+	{
+		OnSpaceshipDestroyed();
+	}
 }
 
 void ASpaceship::SetRotation(const FRotator& Rotation)
@@ -31,15 +38,29 @@ void ASpaceship::Shoot()
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, GetActorLocation(), GetActorRotation(), FActorSpawnParameters());
 }
 
+// ----- REDÉFINITIONS et CONSTRUCTEUR -----
+
 // Called to bind functionality to input
 void ASpaceship::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+// Called when the game starts or when spawned
+void ASpaceship::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+// Called every frame
+void ASpaceship::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
 // Sets default values
 ASpaceship::ASpaceship()
 {
-	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this pawn to call Tick() every frame. You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
