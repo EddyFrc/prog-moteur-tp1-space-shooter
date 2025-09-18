@@ -3,12 +3,9 @@
 
 #include "SpaceShooter/Public/VolumePawn.h"
 
-// ----- GETTERS -----
+#include "GameFramework/FloatingPawnMovement.h"
 
-URotatingMovementComponent* AVolumePawn::GetRotatingMovementComponent()
-{
-	return RotatingMovementComponent;
-}
+// ----- GETTERS -----
 
 UPawnMovementComponent* AVolumePawn::GetPawnMovementComponent()
 {
@@ -29,6 +26,7 @@ UCapsuleComponent* AVolumePawn::GetCapsuleComponent()
 
 void AVolumePawn::ApplyForce(const FVector& Force)
 {
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Format(TEXT("Apply force X={0} Y={1} Z={2}"), {Force.X, Force.Y, Force.Z}));
 	GetPawnMovementComponent()->AddInputVector(Force);
 }
 
@@ -36,14 +34,9 @@ void AVolumePawn::Move(const FVector& Direction)
 {
 	FVector ActualForce = FVector(Direction);
 	ActualForce.Normalize();
-	ActualForce *= GetPawnMovementComponent()->Velocity;
+	ActualForce *= GetPawnMovementComponent()->GetMaxSpeed();
 	ActualForce = ActualForce.GetClampedToMaxSize(GetPawnMovementComponent()->GetMaxSpeed());
 	ApplyForce(ActualForce);
-}
-
-void AVolumePawn::ApplyRotationForce(const FRotator& Rotation)
-{
-	GetRotatingMovementComponent()->RotationRate = Rotation;
 }
 
 // ----- REDÉFINITIONS et CONSTRUCTEUR -----
@@ -81,7 +74,4 @@ AVolumePawn::AVolumePawn()
 	PawnMovementComponent = CreateDefaultSubobject<UPawnMovementComponent, UFloatingPawnMovement>(
 		TEXT("PawnMovementComponent"));
 	GetPawnMovementComponent()->UpdatedComponent = GetCapsuleComponent();
-
-	RotatingMovementComponent = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("RotatingMovementComponent"));
-	GetRotatingMovementComponent()->UpdatedComponent = GetCapsuleComponent();
 }

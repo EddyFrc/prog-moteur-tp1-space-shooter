@@ -4,9 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/CapsuleComponent.h"
-#include "GameFramework/FloatingPawnMovement.h"
 #include "GameFramework/Pawn.h"
-#include "GameFramework/RotatingMovementComponent.h"
 #include "VolumePawn.generated.h"
 
 UCLASS()
@@ -25,14 +23,8 @@ class SPACESHOOTER_API AVolumePawn : public APawn
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UPawnMovementComponent* PawnMovementComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	URotatingMovementComponent* RotatingMovementComponent;
-
 protected:
 	// ----- GETTERS -----
-
-	UFUNCTION(BlueprintCallable)
-	URotatingMovementComponent* GetRotatingMovementComponent();
 
 	UFUNCTION(BlueprintCallable)
 	UPawnMovementComponent* GetPawnMovementComponent();

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputAction.h"
 #include "Spaceship.h"
 #include "PlayerSpaceship.generated.h"
 
@@ -10,6 +11,24 @@ UCLASS()
 class SPACESHOOTER_API APlayerSpaceship : public ASpaceship
 {
 	GENERATED_BODY()
+
+	// ----- ATTRIBUTS -----
+
+	UPROPERTY(EditAnywhere)
+	UInputAction* MoveAction;
+
+	UPROPERTY(EditAnywhere)
+	UInputAction* ShootAction;
+
+	// ----- MÉTHODES -----
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void MoveFromInput(const FVector2D& Input);
+
+	void OnMoveAction(const FInputActionInstance& Instance);
+
+	void OnShootAction(const FInputActionInstance& Instance);
 
 	// ----- REDÉFINITIONS et CONSTRUCTEUR -----
 
