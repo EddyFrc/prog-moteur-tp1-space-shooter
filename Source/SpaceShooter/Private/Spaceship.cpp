@@ -28,11 +28,6 @@ void ASpaceship::SetDirection(const FRotator& Rotation)
 	GetRootComponent()->SetRelativeRotation(Rotation);
 }
 
-void ASpaceship::MoveForward()
-{
-	Move(GetActorRotation().Vector());
-}
-
 void ASpaceship::Shoot()
 {
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, GetActorLocation(), GetActorRotation(), FActorSpawnParameters());

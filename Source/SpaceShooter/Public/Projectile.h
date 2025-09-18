@@ -7,9 +7,16 @@
 #include "Projectile.generated.h"
 
 UCLASS()
-class SPACESHOOTER_API AProjectile : public AVolumePawn
+class SPACESHOOTER_API AProjectile : public AActor
 {
 	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* StaticMeshComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	UCapsuleComponent* CapsuleComponent;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -18,9 +25,6 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	// Sets default values for this pawn's properties
 	AProjectile();

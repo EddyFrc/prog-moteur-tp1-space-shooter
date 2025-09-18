@@ -55,13 +55,20 @@ protected:
 	 */
 	UFUNCTION(BlueprintCallable)
 	void Move(const FVector& Direction);
-
 	// ----- REDÉFINITIONS et CONSTRUCTEUR -----
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
+	/**
+	 * Fait se déplacer le vaisseau vers l'avant
+	 *
+	 * À appeler à chaque frame
+	 */
+	UFUNCTION(BlueprintCallable)
+	void MoveForward();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

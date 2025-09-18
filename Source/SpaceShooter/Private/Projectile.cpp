@@ -3,6 +3,8 @@
 
 #include "Projectile.h"
 
+#include "Physics/ImmediatePhysics/ImmediatePhysicsShared/ImmediatePhysicsCore.h"
+
 
 // Called when the game starts or when spawned
 void AProjectile::BeginPlay()
@@ -14,15 +16,13 @@ void AProjectile::BeginPlay()
 void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	FVector Direction = GetActorRotation().Vector();
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Format(TEXT("Actor rotation vector = ({0}, {1}, {2})"), {Direction.X, Direction.Y, Direction.Z}));
-	Move(GetActorRotation().Vector());
-}
-
-// Called to bind functionality to input
-void AProjectile::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	FVector ActualDirection = GetActorRotation().Vector();
+	ActualDirection.Normalize();
+	ActualDirection *= 2000;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Tick");
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Format(TEXT("GetActorForwardVector({0}, {1}, {2})"), {ActualDirection.X, ActualDirection.Y, ActualDirection.Z}));
+	CapsuleComponent->SetPhysicsLinearVelocity(ActualDirection, false);
+	
 }
 
 // Sets default values
@@ -30,4 +30,10 @@ AProjectile::AProjectile()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
+	RootComponent = CapsuleComponent;
+
+	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
+	StaticMeshComponent->SetupAttachment(CapsuleComponent);
 }

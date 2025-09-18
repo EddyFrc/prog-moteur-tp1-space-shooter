@@ -42,14 +42,6 @@ public:
 	void SetDirection(const FRotator& Rotation);
 
 	/**
-	 * Fait se déplacer le vaisseau vers l'avant
-	 *
-	 * À appeler à chaque frame
-	 */
-	UFUNCTION(BlueprintCallable)
-	void MoveForward();
-
-	/**
 	 * Génère un projectile selon la classe définie dans ProjectileClass
 	 */
 	UFUNCTION(BlueprintCallable)
