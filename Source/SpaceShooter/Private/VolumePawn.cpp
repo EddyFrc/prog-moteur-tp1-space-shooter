@@ -26,7 +26,7 @@ UCapsuleComponent* AVolumePawn::GetCapsuleComponent()
 
 void AVolumePawn::ApplyForce(const FVector& Force)
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Format(TEXT("Apply force X={0} Y={1} Z={2}"), {Force.X, Force.Y, Force.Z}));
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Format(TEXT("Apply force X={0} Y={1} Z={2}"), {Force.X, Force.Y, Force.Z}));
 	GetPawnMovementComponent()->AddInputVector(Force);
 }
 
@@ -36,6 +36,7 @@ void AVolumePawn::Move(const FVector& Direction)
 	ActualForce.Normalize();
 	ActualForce *= GetPawnMovementComponent()->GetMaxSpeed();
 	ActualForce = ActualForce.GetClampedToMaxSize(GetPawnMovementComponent()->GetMaxSpeed());
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Format(TEXT("Effective vector = ({0}, {1}, {2})"), {ActualForce.X, ActualForce.Y, ActualForce.Z}));
 	ApplyForce(ActualForce);
 }
 

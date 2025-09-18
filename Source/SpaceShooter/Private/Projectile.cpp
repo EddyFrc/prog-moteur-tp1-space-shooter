@@ -14,6 +14,8 @@ void AProjectile::BeginPlay()
 void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	FVector Direction = GetActorRotation().Vector();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Format(TEXT("Actor rotation vector = ({0}, {1}, {2})"), {Direction.X, Direction.Y, Direction.Z}));
 	Move(GetActorRotation().Vector());
 }
 

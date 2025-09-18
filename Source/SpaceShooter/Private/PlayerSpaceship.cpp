@@ -48,7 +48,7 @@ void APlayerSpaceship::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	Input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerSpaceship::OnMoveAction);
-	Input->BindAction(ShootAction, ETriggerEvent::Triggered, this, &APlayerSpaceship::OnShootAction);
+	Input->BindAction(ShootAction, ETriggerEvent::Started, this, &APlayerSpaceship::OnShootAction);
 }
 
 
