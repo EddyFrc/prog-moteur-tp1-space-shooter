@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "NiagaraComponent.h"
-#include "NiagaraFunctionLibrary.h"
 #include "VolumePawn.h"
 #include "Projectile.generated.h"
 

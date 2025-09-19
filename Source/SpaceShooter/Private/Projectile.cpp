@@ -3,12 +3,19 @@
 
 #include "Projectile.h"
 
+#include "Obstacle.h"
 #include "GameFramework/KillZVolume.h"
 
 void AProjectile::OnBeginOverlap(AActor* MyActor, AActor* OtherActor)
 {
 	if (Cast<AKillZVolume>(OtherActor))
 	{
+		Destroy();
+	}
+
+	if (AObstacle* Obstacle = Cast<AObstacle>(OtherActor))
+	{
+		Obstacle->TakeHit();
 		Destroy();
 	}
 }

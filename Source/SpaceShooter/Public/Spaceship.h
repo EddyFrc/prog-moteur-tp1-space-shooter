@@ -14,7 +14,7 @@ class SPACESHOOTER_API ASpaceship : public AVolumePawn
 	// ----- ATTRIBUTS -----
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variables")
 	int Health;
 
 public:
