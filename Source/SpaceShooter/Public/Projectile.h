@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "VolumePawn.h"
 #include "Projectile.generated.h"
 
@@ -17,8 +19,13 @@ class SPACESHOOTER_API AProjectile : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UCapsuleComponent* CapsuleComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	UNiagaraComponent* ProjectileTrail;
 
 protected:
+	UFUNCTION()
+	void OnBeginOverlap(AActor* MyActor, AActor* OtherActor);
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
