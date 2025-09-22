@@ -15,8 +15,14 @@ void ASpaceShooterLevel::OnObstacleSpawn()
 
 void ASpaceShooterLevel::BeginPlay()
 {
+	Score = 0;
 	Super::BeginPlay();
 	IsGameRunning = true;
 
 	GetWorldTimerManager().SetTimer(ObstacleSpawnTimer, this, &ThisClass::OnObstacleSpawn, 0.2f, true);
+}
+
+FString ASpaceShooterLevel::GetScoreText()
+{
+	return FString::Printf(TEXT("%d"), Score);
 }

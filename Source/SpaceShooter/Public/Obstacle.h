@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/RotatingMovementComponent.h"
+#include "SpaceShooterLevel.h"
 #include "Obstacle.generated.h"
 
 UCLASS()
@@ -29,11 +30,20 @@ class SPACESHOOTER_API AObstacle : public AActor
 	UPROPERTY()
 	UNiagaraComponent* ParticleComponent;
 
+	UPROPERTY()
+	ASpaceShooterLevel* SpaceShooterLevelScript;
+	
+
 protected:
 	double Scale;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variables")
 	int Health;
+	int MaxHealth;
+	// Instant du premier TakeHit (premier projectile reçu), pas défini si pas encore touché
+	FDateTime FirstHitTimestamp;
+	// Nombre de millisecondes entre le premier TakeHit et le dernier (celui qui détruit l'astéroide)
+	double TotalTimeToDestroy;
 
 	UFUNCTION()
 	void OnBeginOverlap(AActor* Myself, AActor* OtherActor);

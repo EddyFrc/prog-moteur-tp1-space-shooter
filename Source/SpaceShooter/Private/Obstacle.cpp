@@ -4,7 +4,11 @@
 
 #include "NiagaraFunctionLibrary.h"
 #include "PlayerSpaceship.h"
+#include "SpaceShooterLevel.h"
+#include "Engine/LevelScriptActor.h"
 #include "GameFramework/KillZVolume.h"
+#include "Math/UnitConversion.h"
+#include "Microsoft/AllowMicrosoftPlatformTypes.h"
 
 void AObstacle::OnBeginOverlap(AActor* Myself, AActor* OtherActor)
 {
@@ -69,9 +73,22 @@ void AObstacle::ApplyRandomPath()
 
 void AObstacle::TakeHit()
 {
+	if (Health == MaxHealth)
+	{
+		FirstHitTimestamp = FDateTime::Now();
+	}
 	Health--;
+	SpaceShooterLevelScript->Score += 50;
+	SpaceShooterLevelScript->Score += (MaxHealth - Health) * 5;
 	if (Health <= 0)
 	{
+		// Calcul du temps total pour détruire l'astéroide
+		TotalTimeToDestroy = (FDateTime::Now() - FirstHitTimestamp).GetTotalMilliseconds();
+		// Plus ce temps est bas plus le bonus est élevé
+		if (TotalTimeToDestroy < 5000)
+			SpaceShooterLevelScript->Score += (5000 - TotalTimeToDestroy) / 3;
+		// Dans tous les cas on gagne 1000
+		SpaceShooterLevelScript->Score += 1000;
 		OnObstacleDestroy();
 	}
 }
@@ -92,6 +109,7 @@ void AObstacle::OnObstacleDestroy()
 void AObstacle::BeginPlay()
 {
 	Super::BeginPlay();
+	SpaceShooterLevelScript = Cast<ASpaceShooterLevel>(GetWorld()->GetLevelScriptActor());
 	ApplyRandomPath();
 	OnActorBeginOverlap.AddDynamic(this, &ThisClass::OnBeginOverlap);
 }
@@ -127,4 +145,6 @@ AObstacle::AObstacle()
 	StaticMeshComponent->SetWorldScale3D(FVector(Scale, Scale, Scale));
 
 	Health = FMath::RandRange(5, 10);
+	MaxHealth = Health;
+
 }

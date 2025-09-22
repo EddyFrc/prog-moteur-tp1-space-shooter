@@ -25,6 +25,9 @@ public:
 
 	void OnObstacleSpawn();
 
+	UFUNCTION(BlueprintCallable)
+	FString GetScoreText();
+
 protected:
 	virtual void BeginPlay() override;
 };
