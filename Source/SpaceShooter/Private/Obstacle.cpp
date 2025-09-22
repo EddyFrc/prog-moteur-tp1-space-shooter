@@ -73,6 +73,8 @@ void AObstacle::ApplyRandomPath()
 
 void AObstacle::TakeHit()
 {
+	StaticMeshComponent->SetMaterial(0, HitMaterial);
+	LastHitFrame = GFrameCounter;
 	if (Health == MaxHealth)
 	{
 		FirstHitTimestamp = FDateTime::Now();
@@ -97,7 +99,6 @@ void AObstacle::OnObstacleDestroy()
 {
 	if (Particle)
 	{
-		StaticMeshComponent->SetVisibility(false);
 		ParticleComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 			GetWorld(), Particle, StaticMeshComponent->GetComponentLocation());
 	}
@@ -110,8 +111,16 @@ void AObstacle::BeginPlay()
 {
 	Super::BeginPlay();
 	SpaceShooterLevelScript = Cast<ASpaceShooterLevel>(GetWorld()->GetLevelScriptActor());
-	ApplyRandomPath();
+	Scale = FMath::RandRange(0.004f, 0.01f);
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString::Format(TEXT("Scale = {0}"), {Scale}));
+	StaticMeshComponent->SetRelativeScale3D(FVector(Scale, Scale, Scale));
 	OnActorBeginOverlap.AddDynamic(this, &ThisClass::OnBeginOverlap);
+
+	Health = FMath::RandRange(5, 10);
+	MaxHealth = Health;
+	LastHitFrame = 0;
+	ApplyRandomPath();
+
 }
 
 // Called every frame
@@ -123,6 +132,11 @@ void AObstacle::Tick(float DeltaTime)
 		|| FMath::Abs(StaticMeshComponent->GetComponentLocation().Y) > 800)
 	{
 		Destroy();
+	}
+
+	if (LastHitFrame < GFrameCounter - 5)
+	{
+		StaticMeshComponent->SetMaterial(0, RegularMaterial);
 	}
 }
 
@@ -140,11 +154,5 @@ AObstacle::AObstacle()
 
 	RotatingMovementComponent = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("RotatingMovementComponent"));
 	RotatingMovementComponent->UpdatedComponent = StaticMeshComponent;
-
-	Scale = FMath::RandRange(0.004, 0.01);
-	StaticMeshComponent->SetWorldScale3D(FVector(Scale, Scale, Scale));
-
-	Health = FMath::RandRange(5, 10);
-	MaxHealth = Health;
 
 }

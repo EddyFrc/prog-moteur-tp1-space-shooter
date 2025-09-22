@@ -33,6 +33,12 @@ class SPACESHOOTER_API AObstacle : public AActor
 	UPROPERTY()
 	ASpaceShooterLevel* SpaceShooterLevelScript;
 	
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Materials")
+	UMaterialInterface* RegularMaterial;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Materials")
+	UMaterialInterface* HitMaterial;
 
 protected:
 	double Scale;
@@ -44,6 +50,8 @@ protected:
 	FDateTime FirstHitTimestamp;
 	// Nombre de millisecondes entre le premier TakeHit et le dernier (celui qui détruit l'astéroide)
 	double TotalTimeToDestroy;
+
+	int LastHitFrame;
 
 	UFUNCTION()
 	void OnBeginOverlap(AActor* Myself, AActor* OtherActor);
