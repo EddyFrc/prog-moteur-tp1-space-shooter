@@ -3,6 +3,9 @@
 
 #include "PlayerSpaceship.h"
 #include "EnhancedInputComponent.h"
+#include "MovieSceneTracksComponentTypes.h"
+#include "SpaceShooterLevel.h"
+#include "Kismet/GameplayStatics.h"
 
 // ----- MÉTHODES
 
@@ -13,6 +16,11 @@ void APlayerSpaceship::MoveFromInput(const FVector2D& Input)
 	// Ces méthodes sont héritées, voir Spaceship et VolumePawn
 	SetDirection(CorrespondingRotation);
 	MoveForward();
+}
+
+bool APlayerSpaceship::IsHeartFull(const int HeartIndex) const
+{
+	return Health > HeartIndex;
 }
 
 void APlayerSpaceship::OnMoveAction(const FInputActionInstance& Instance)
@@ -28,18 +36,46 @@ void APlayerSpaceship::OnShootAction(const FInputActionInstance& Instance)
 	}
 }
 
+void APlayerSpaceship::UnsetInvincibility()
+{
+	IsInvincible = false;
+	GetStaticMeshComponent()->SetVisibility(true, false);
+}
+
+
 // ----- REDÉFINITIONS et CONSTRUCTEUR -----
+
+void APlayerSpaceship::TakeHit(const FVector& HitForce)
+{
+	Super::TakeHit(HitForce);
+	IsInvincible = true;
+	GetWorldTimerManager().SetTimer(InvincibilityTimer, this, &APlayerSpaceship::UnsetInvincibility, 3);
+	if (Health <= 0)
+	{
+		OnSpaceshipDestroyed();
+	}
+}
+
+void APlayerSpaceship::OnSpaceshipDestroyed_Implementation()
+{
+	Cast<ASpaceShooterLevel>(GetWorld()->GetLevelScriptActor())->IsGameRunning = false;
+}
 
 // Called when the game starts or when spawned
 void APlayerSpaceship::BeginPlay()
 {
 	Super::BeginPlay();
+	SetActorLocation(FVector(0, 0, 0));
 }
 
 // Called every frame
 void APlayerSpaceship::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (IsInvincible && GFrameCounter % 3 == 0)
+	{
+		GetStaticMeshComponent()->ToggleVisibility(false);
+	}
 }
 
 // Called to bind functionality to input
@@ -58,6 +94,6 @@ APlayerSpaceship::APlayerSpaceship()
 	// Set this pawn to call Tick() every frame. You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Auto possess player
-	AutoPossessPlayer = EAutoReceiveInput::Player0;
+	PostProcess = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcess"));
+	PostProcess->SetupAttachment(GetCapsuleComponent());
 }

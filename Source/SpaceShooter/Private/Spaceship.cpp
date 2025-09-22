@@ -4,23 +4,15 @@
 
 // ----- MÉTHODES -----
 
-void ASpaceship::OnSpaceshipDestroyed()
-{
-	Destroy();
-}
-
 int ASpaceship::GetHealth()
 {
 	return Health;
 }
 
-void ASpaceship::TakeHit()
+void ASpaceship::TakeHit(const FVector& HitForce)
 {
 	Health--;
-	if (Health <= 0)
-	{
-		OnSpaceshipDestroyed();
-	}
+	GetCapsuleComponent()->AddImpulse(HitForce, NAME_None, true);
 }
 
 void ASpaceship::SetDirection(const FRotator& Rotation)

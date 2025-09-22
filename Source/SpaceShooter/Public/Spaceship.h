@@ -23,16 +23,12 @@ public:
 
 	// ----- MÉTHODES -----
 
-protected:
-	UFUNCTION(BlueprintCallable)
-	virtual void OnSpaceshipDestroyed();
-
 public:
 	UFUNCTION(BlueprintCallable)
 	int GetHealth();
 
 	UFUNCTION(BlueprintCallable)
-	void TakeHit();
+	virtual void TakeHit(const FVector& HitForce);
 
 	/**
 	 * Change la direction du vaisseau

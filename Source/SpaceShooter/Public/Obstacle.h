@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Projectile.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/RotatingMovementComponent.h"
@@ -22,7 +23,15 @@ class SPACESHOOTER_API AObstacle : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	URotatingMovementComponent* RotatingMovementComponent;
 
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* Particle;
+
+	UPROPERTY()
+	UNiagaraComponent* ParticleComponent;
+
 protected:
+	double Scale;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variables")
 	int Health;
 
