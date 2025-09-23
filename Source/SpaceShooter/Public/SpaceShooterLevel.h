@@ -18,6 +18,8 @@ public:
 	bool IsGameRunning;
 	FTimerHandle ObstacleSpawnTimer;
 
+	int Score;
+
 	UPROPERTY(EditAnywhere)
 	UClass* DefaultObstacleClass;
 
