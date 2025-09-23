@@ -80,17 +80,23 @@ void AObstacle::TakeHit()
 		FirstHitTimestamp = FDateTime::Now();
 	}
 	Health--;
-	SpaceShooterLevelScript->Score += 50;
-	SpaceShooterLevelScript->Score += (MaxHealth - Health) * 5;
+	if (SpaceShooterLevelScript)
+	{
+		SpaceShooterLevelScript->Score += 50;
+		SpaceShooterLevelScript->Score += (MaxHealth - Health) * 5;
+	}
 	if (Health <= 0)
 	{
-		// Calcul du temps total pour détruire l'astéroide
-		TotalTimeToDestroy = (FDateTime::Now() - FirstHitTimestamp).GetTotalMilliseconds();
-		// Plus ce temps est bas plus le bonus est élevé
-		if (TotalTimeToDestroy < 5000)
-			SpaceShooterLevelScript->Score += (5000 - TotalTimeToDestroy) / 3;
-		// Dans tous les cas on gagne 1000
-		SpaceShooterLevelScript->Score += 1000;
+		if (SpaceShooterLevelScript)
+		{
+			// Calcul du temps total pour détruire l'astéroide
+			TotalTimeToDestroy = (FDateTime::Now() - FirstHitTimestamp).GetTotalMilliseconds();
+			// Plus ce temps est bas plus le bonus est élevé
+			if (TotalTimeToDestroy < 5000)
+				SpaceShooterLevelScript->Score += (5000 - TotalTimeToDestroy) / 3;
+			// Dans tous les cas on gagne 1000
+			SpaceShooterLevelScript->Score += 1000;
+		}
 		OnObstacleDestroy();
 	}
 }
@@ -112,11 +118,11 @@ void AObstacle::BeginPlay()
 	Super::BeginPlay();
 	SpaceShooterLevelScript = Cast<ASpaceShooterLevel>(GetWorld()->GetLevelScriptActor());
 	Scale = FMath::RandRange(0.004f, 0.01f);
-	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString::Format(TEXT("Scale = {0}"), {Scale}));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString::Format(TEXT("Scale = {0}"), {Scale}));
 	StaticMeshComponent->SetRelativeScale3D(FVector(Scale, Scale, Scale));
 	OnActorBeginOverlap.AddDynamic(this, &ThisClass::OnBeginOverlap);
 
-	Health = FMath::RandRange(5, 10);
+	Health = FMath::RandRange(3, 7);
 	MaxHealth = Health;
 	LastHitFrame = 0;
 	ApplyRandomPath();
