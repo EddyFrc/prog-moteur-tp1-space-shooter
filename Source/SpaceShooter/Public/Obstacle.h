@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Projectile.h"
+#include "SpaceShooterLevel.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/RotatingMovementComponent.h"
-#include "SpaceShooterLevel.h"
 #include "Obstacle.generated.h"
 
 UCLASS()
@@ -32,13 +32,16 @@ class SPACESHOOTER_API AObstacle : public AActor
 
 	UPROPERTY()
 	ASpaceShooterLevel* SpaceShooterLevelScript;
-	
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Materials")
 	UMaterialInterface* RegularMaterial;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Materials")
 	UMaterialInterface* HitMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UClass* ScoreIndicatorClass;
 
 protected:
 	double Scale;
@@ -52,6 +55,8 @@ protected:
 	double TotalTimeToDestroy;
 
 	int LastHitFrame;
+
+	int AddedScore;
 
 	UFUNCTION()
 	void OnBeginOverlap(AActor* Myself, AActor* OtherActor);

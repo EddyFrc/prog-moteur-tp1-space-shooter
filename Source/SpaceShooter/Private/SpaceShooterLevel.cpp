@@ -3,8 +3,6 @@
 
 #include "SpaceShooterLevel.h"
 
-#include "Microsoft/AllowMicrosoftPlatformTypes.h"
-
 void ASpaceShooterLevel::OnObstacleSpawn()
 {
 	if (IsGameRunning)

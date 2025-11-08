@@ -18,6 +18,7 @@ public:
 	bool IsGameRunning;
 	FTimerHandle ObstacleSpawnTimer;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Score;
 
 	UPROPERTY(EditAnywhere)

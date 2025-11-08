@@ -13,10 +13,14 @@ void AProjectile::OnBeginOverlap(AActor* MyActor, AActor* OtherActor)
 		Destroy();
 	}
 
-	if (AObstacle* Obstacle = Cast<AObstacle>(OtherActor))
+	if (AObstacle* Obstacle = Cast<AObstacle>(OtherActor);
+		Obstacle && !IsDestroyed)
 	{
 		Obstacle->TakeHit();
-		Destroy();
+		IsDestroyed = true;
+		DestroyedTime = GFrameCounter;
+		StaticMeshComponent->SetVisibility(false, true);
+		CapsuleComponent->SetPhysicsLinearVelocity(FVector(0, 0, 0), false);
 	}
 }
 
@@ -31,17 +35,24 @@ void AProjectile::BeginPlay()
 // Called every frame
 void AProjectile::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-	FVector ActualDirection = GetActorRotation().Vector();
-	ActualDirection.Normalize();
-	ActualDirection *= 2000;
-	// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Tick");
-	// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
-	//                                  FString::Format(
-	// 	                                 TEXT("GetActorForwardVector({0}, {1}, {2})"), {
-	// 		                                 ActualDirection.X, ActualDirection.Y, ActualDirection.Z
-	// 	                                 }));
-	CapsuleComponent->SetPhysicsLinearVelocity(ActualDirection, false);
+	if (!IsDestroyed)
+	{
+		Super::Tick(DeltaTime);
+		FVector ActualDirection = GetActorRotation().Vector();
+		ActualDirection.Normalize();
+		ActualDirection *= 2000;
+		// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Tick");
+		// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
+		//                                  FString::Format(
+		// 	                                 TEXT("GetActorForwardVector({0}, {1}, {2})"), {
+		// 		                                 ActualDirection.X, ActualDirection.Y, ActualDirection.Z
+		// 	                                 }));
+		CapsuleComponent->SetPhysicsLinearVelocity(ActualDirection, false);
+	} else if (GFrameCounter - 60 > DestroyedTime)
+	{
+		// If the trail finished more than 60 frames ago, destroy the object for good
+		Destroy();
+	}
 }
 
 // Sets default values

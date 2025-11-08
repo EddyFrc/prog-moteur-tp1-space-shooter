@@ -1,0 +1,49 @@
+# Unreal Engine: fichiers/dossiers générés (jamais à versionner)
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+DerivedDataCacheBoot.ddc
+DerivedDataCacheBoot.journal
+
+# Build/compilation temporaires
+*.VC.db
+*.VC.opendb
+*.sln
+*.suo
+*.user
+*.userprefs
+*.opensdf
+*.sdf
+
+# Logs
+*.log
+*.tlog
+
+# Fichiers temporaires de crash
+*.dmp
+*.mdmp
+
+# Cache de shaders
+ShaderCache/
+
+# Configs locales IDE
+.vscode/
+.idea/
+
+# Fichiers générés par le système
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Backup / autosave
+*.bak
+*.tmp
+*.temp
+*.swp
+*.sublime-workspace
+*.sublime-project
+
+# Plugins générés par UE
+Plugins/*/Intermediate/
+Plugins/*/Binaries/

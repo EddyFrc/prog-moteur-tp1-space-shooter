@@ -21,6 +21,10 @@ class SPACESHOOTER_API AProjectile : public AActor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UNiagaraComponent* ProjectileTrail;
 
+	// Used to let the trail finish
+	int DestroyedTime;
+	bool IsDestroyed;
+
 protected:
 	UFUNCTION()
 	void OnBeginOverlap(AActor* MyActor, AActor* OtherActor);

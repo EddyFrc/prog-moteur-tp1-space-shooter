@@ -4,11 +4,10 @@
 
 #include "NiagaraFunctionLibrary.h"
 #include "PlayerSpaceship.h"
+#include "ScoreIndicator.h"
 #include "SpaceShooterLevel.h"
 #include "Engine/LevelScriptActor.h"
 #include "GameFramework/KillZVolume.h"
-#include "Math/UnitConversion.h"
-#include "Microsoft/AllowMicrosoftPlatformTypes.h"
 
 void AObstacle::OnBeginOverlap(AActor* Myself, AActor* OtherActor)
 {
@@ -73,6 +72,7 @@ void AObstacle::ApplyRandomPath()
 
 void AObstacle::TakeHit()
 {
+	AddedScore = 0;
 	StaticMeshComponent->SetMaterial(0, HitMaterial);
 	LastHitFrame = GFrameCounter;
 	if (Health == MaxHealth)
@@ -80,23 +80,33 @@ void AObstacle::TakeHit()
 		FirstHitTimestamp = FDateTime::Now();
 	}
 	Health--;
-	if (SpaceShooterLevelScript)
-	{
-		SpaceShooterLevelScript->Score += 50;
-		SpaceShooterLevelScript->Score += (MaxHealth - Health) * 5;
-	}
+	AddedScore += 50;
+	AddedScore += (MaxHealth - Health) * 5;
 	if (Health <= 0)
 	{
-		if (SpaceShooterLevelScript)
-		{
-			// Calcul du temps total pour détruire l'astéroide
-			TotalTimeToDestroy = (FDateTime::Now() - FirstHitTimestamp).GetTotalMilliseconds();
-			// Plus ce temps est bas plus le bonus est élevé
-			if (TotalTimeToDestroy < 5000)
-				SpaceShooterLevelScript->Score += (5000 - TotalTimeToDestroy) / 3;
-			// Dans tous les cas on gagne 1000
-			SpaceShooterLevelScript->Score += 1000;
-		}
+		// Calcul du temps total pour détruire l'astéroide
+		TotalTimeToDestroy = (FDateTime::Now() - FirstHitTimestamp).GetTotalMilliseconds();
+		// Plus ce temps est bas plus le bonus est élevé
+		if (TotalTimeToDestroy < 5000)
+			AddedScore += (5000 - TotalTimeToDestroy) / 15;
+		// Dans tous les cas on gagne 500
+		AddedScore += 150;
+	}
+
+	if (SpaceShooterLevelScript)
+	{
+		SpaceShooterLevelScript->Score += AddedScore;
+	}
+
+	FVector Location = StaticMeshComponent->GetComponentLocation();
+	Location.Z = 150;
+
+	AScoreIndicator* ScoreIndicator = GetWorld()->SpawnActor<AScoreIndicator>(
+		ScoreIndicatorClass, Location, FRotator(0, 0, 0));
+	ScoreIndicator->SetLabel(FString::Format(TEXT("+{0}"), {AddedScore}));
+
+	if (Health <= 0)
+	{
 		OnObstacleDestroy();
 	}
 }
@@ -126,7 +136,6 @@ void AObstacle::BeginPlay()
 	MaxHealth = Health;
 	LastHitFrame = 0;
 	ApplyRandomPath();
-
 }
 
 // Called every frame
@@ -160,5 +169,4 @@ AObstacle::AObstacle()
 
 	RotatingMovementComponent = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("RotatingMovementComponent"));
 	RotatingMovementComponent->UpdatedComponent = StaticMeshComponent;
-
 }
